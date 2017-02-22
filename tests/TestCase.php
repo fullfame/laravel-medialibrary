@@ -71,8 +71,17 @@ abstract class TestCase extends Orchestra
             'root' => $this->getPublicDirectory('media2'),
         ]);
 
+        $app['config']->set('filesystems.disks.storageLink', [
+            'driver' => 'local',
+            'root' => $this->getStorageDirectory('app/public/media'),
+        ]);
+
         $app->bind('path.public', function () {
             return $this->getPublicDirectory();
+        });
+
+        $app->bind('path.storage', function () {
+            return $this->getStorageDirectory();
         });
 
         $app['config']->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
@@ -175,5 +184,11 @@ abstract class TestCase extends Orchestra
     public function getPublicDirectory($suffix = '')
     {
         return $this->getTempDirectory('public'.($suffix == '' ? '' : '/'.$suffix));
+    }
+
+    public function getStorageDirectory($suffix = '')
+    {
+        return $this->getTempDirectory('storage'.($suffix == '' ? '' : '/'.$suffix));
+
     }
 }

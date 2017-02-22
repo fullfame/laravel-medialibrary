@@ -19,7 +19,7 @@ abstract class BaseUrlGenerator implements UrlGenerator
     protected $pathGenerator;
 
     /** @var \Illuminate\Contracts\Config\Repository */
-    protected $config;
+    public $config;
 
     /** @param \Illuminate\Contracts\Config\Repository $config */
     public function __construct(Config $config)

@@ -15,8 +15,8 @@ class LocalUrlGenerator extends BaseUrlGenerator
      */
     public function getUrl(): string
     {
-        if (! starts_with($this->getStoragePath(), public_path())) {
-            throw UrlCannotBeDetermined::mediaNotPubliclyAvailable($this->getStoragePath(), public_path());
+        if (!$this->isPubliclyAvailable()) {
+            throw UrlCannotBeDetermined::mediaNotPubliclyAvailable($this->getStoragePath(), public_path().':'.storage_path('app/public'));
         }
 
         $url = $this->getBaseMediaDirectory().'/'.$this->getPathRelativeToRoot();
@@ -66,5 +66,14 @@ class LocalUrlGenerator extends BaseUrlGenerator
     public function rawUrlEncodeFilename(string $path = ''): string
     {
         return pathinfo($path, PATHINFO_DIRNAME).'/'.rawurlencode(pathinfo($path, PATHINFO_BASENAME));
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isPubliclyAvailable(): bool
+    {
+        $real_storage_path = $this->getStoragePath(); // Symlinks are resolved here.
+        return starts_with($real_storage_path, public_path()) || starts_with($real_storage_path, storage_path('app/public'));
     }
 }
