@@ -68,11 +68,11 @@ abstract class TestCase extends Orchestra
 
         $app['config']->set('filesystems.disks.secondMediaDisk', [
             'driver' => 'local',
-            'root' => $this->getTempDirectory('media2'),
+            'root' => $this->getPublicDirectory('media2'),
         ]);
 
         $app->bind('path.public', function () {
-            return $this->getTempDirectory();
+            return $this->getPublicDirectory();
         });
 
         $app['config']->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
@@ -120,7 +120,7 @@ abstract class TestCase extends Orchestra
 
     public function getMediaDirectory($suffix = '')
     {
-        return $this->getTempDirectory().'/media'.($suffix == '' ? '' : '/'.$suffix);
+        return $this->getPublicDirectory().'/media'.($suffix == '' ? '' : '/'.$suffix);
     }
 
     public function getTestFilesDirectory($suffix = '')
@@ -170,5 +170,10 @@ abstract class TestCase extends Orchestra
             'medialibrary.s3.domain',
             'https://'.$s3Configuration['bucket'].'.s3.amazonaws.com'
         );
+    }
+
+    public function getPublicDirectory($suffix = '')
+    {
+        return $this->getTempDirectory('public'.($suffix == '' ? '' : '/'.$suffix));
     }
 }
